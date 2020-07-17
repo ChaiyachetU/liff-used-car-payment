@@ -103,7 +103,6 @@
       // Listen for form submit
       let form = document.getElementById("carForm");
       form.addEventListener("submit", submitForm);
-      form.reset();
 
       // Function form submit
       function submitForm(e) {
@@ -112,6 +111,9 @@
         let carYear = Number(getInputValue("carYear"));
         let carPrice = Number(getInputValue("carPrice"));
         let downPayment = Number(getInputValue("downPayment"));
+
+        // Reset form
+        form.reset();
 
         // Loan
         let loan = carPrice - downPayment;
