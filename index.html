@@ -110,7 +110,6 @@
         // Listen for form submit
         let form = document.getElementById("carForm");
         form.addEventListener("submit", submitForm);
-
       }
 
       // Function form submit
@@ -141,7 +140,7 @@
         console.log(JSON.stringify(message));
 
         // Send messages here.
-        await liff.sendMessages([
+        liff.sendMessages([
           {
             type: "sticker",
             stickerId: 52002734,
