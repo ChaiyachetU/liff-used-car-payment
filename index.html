@@ -140,17 +140,7 @@
         console.log(JSON.stringify(message));
 
         // Send messages here.
-        liff.sendMessages([
-          {
-            type: "sticker",
-            stickerId: 52002734,
-            packageId: 11537,
-          },
-          {
-            type: "text",
-            text: "Hello from LIFF.🐱",
-          },
-        ]);
+        liff.sendMessages(message);
         alert("Message sent");
 
         liff.closeWindow();
