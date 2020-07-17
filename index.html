@@ -98,27 +98,20 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-    <!-- Integrating the LIFF SDK -->
-    <script src="https://static.line-scdn.net/liff/edge/versions/2.2.0/sdk.js"></script>
-
     <!-- Start Script For Get Form Values and Calculation -->
     <script>
-      // Initializes a LIFF app. You can only call other LIFF SDK methods after calling liff.init()
-      liff.init({ liffId: "1654462700-qD82g9dX" });
-
       // Listen for form submit
       let form = document.getElementById("carForm");
       form.addEventListener("submit", submitForm);
+      form.reset();
 
       // Function form submit
       function submitForm(e) {
-        let form = document.getElementById("carForm");
         e.preventDefault();
-        // Get values
+        // Get values and set to number type
         let carYear = Number(getInputValue("carYear"));
         let carPrice = Number(getInputValue("carPrice"));
         let downPayment = Number(getInputValue("downPayment"));
-        form.reset();
 
         // Loan
         let loan = carPrice - downPayment;
@@ -135,11 +128,7 @@
           resultCalculate
         );
 
-        // console.log(JSON.stringify(message));
-
-        // Send messages here.
-        liff.sendMessages(message);
-        liff.closeWindow();
+        console.log(JSON.stringify(message));
       }
 
       // Function to get get form values
@@ -219,7 +208,7 @@
         loan,
         resultCalculate
       ) {
-        let carYearTxt = Date.now().getFullYear() - carYear;
+        let carYearTxt = new Date().getFullYear() - carYear;
         let carPriceTxt = numberToString(carPrice);
         let downPaymentTxt = numberToString(downPayment);
         let loanTxt = numberToString(loan);
