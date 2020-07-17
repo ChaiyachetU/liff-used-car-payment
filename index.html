@@ -107,7 +107,10 @@
       let form = document.getElementById("carForm");
       form.addEventListener("submit", submitForm);
       // Function form submit
-      function submitForm(e) {
+      async function submitForm(e) {
+        // Initializes a LIFF app. You can only call other LIFF SDK methods after calling liff.init()
+        await liff.init({ liffId: "1654462700-qD82g9dX" });
+
         e.preventDefault();
         // Get values
         let carYear = Number(getInputValue("carYear"));
