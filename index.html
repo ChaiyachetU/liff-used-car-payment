@@ -103,14 +103,12 @@
 
     <!-- Start Script For Get Form Values and Calculation -->
     <script>
-      async function main() {
-        // Initializes a LIFF app. You can only call other LIFF SDK methods after calling liff.init()
-        await liff.init({ liffId: "1654462700-qD82g9dX" });
+      // Initializes a LIFF app. You can only call other LIFF SDK methods after calling liff.init()
+      liff.init({ liffId: "1654462700-qD82g9dX" });
 
-        // Listen for form submit
-        let form = document.getElementById("carForm");
-        form.addEventListener("submit", submitForm);
-      }
+      // Listen for form submit
+      let form = document.getElementById("carForm");
+      form.addEventListener("submit", submitForm);
 
       // Function form submit
       function submitForm(e) {
@@ -137,12 +135,10 @@
           resultCalculate
         );
 
-        console.log(JSON.stringify(message));
+        // console.log(JSON.stringify(message));
 
         // Send messages here.
         liff.sendMessages(message);
-        alert("Message sent");
-
         liff.closeWindow();
       }
 
@@ -216,7 +212,14 @@
       }
 
       // Creat flex message
-      function createFlexMessage(carPrice, downPayment, loan, resultCalculate) {
+      function createFlexMessage(
+        carYear,
+        carPrice,
+        downPayment,
+        loan,
+        resultCalculate
+      ) {
+        let carYearTxt = Date.now().getFullYear() - carYear;
         let carPriceTxt = numberToString(carPrice);
         let downPaymentTxt = numberToString(downPayment);
         let loanTxt = numberToString(loan);
@@ -253,6 +256,39 @@
               },
               {
                 type: "separator",
+                margin: "lg",
+              },
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: "ปีจดทะเบียน",
+                        size: "md",
+                        weight: "bold",
+                      },
+                    ],
+                    width: "150px",
+                  },
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: `${carYearTxt}`,
+                        size: "md",
+                        weight: "bold",
+                        align: "end",
+                      },
+                    ],
+                  },
+                ],
                 margin: "lg",
               },
               {
@@ -533,8 +569,6 @@
 
         return [{ type: "flex", altText: "คำนวณค่างวดรถ", contents: flexJson }];
       }
-
-      main();
     </script>
   </body>
 </html>
