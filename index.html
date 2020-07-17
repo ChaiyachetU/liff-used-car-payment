@@ -103,14 +103,17 @@
 
     <!-- Start Script For Get Form Values and Calculation -->
     <script>
-      // Listen for form submit
-      let form = document.getElementById("carForm");
-      form.addEventListener("submit", submitForm);
-      // Function form submit
-      async function submitForm(e) {
+      async function main() {
         // Initializes a LIFF app. You can only call other LIFF SDK methods after calling liff.init()
         await liff.init({ liffId: "1654462700-qD82g9dX" });
 
+        // Listen for form submit
+        let form = document.getElementById("carForm");
+        form.addEventListener("submit", submitForm);
+      }
+
+      // Function form submit
+      function submitForm(e) {
         e.preventDefault();
         // Get values
         let carYear = Number(getInputValue("carYear"));
@@ -523,6 +526,8 @@
 
         return [{ type: "flex", altText: "คำนวณค่างวดรถ", contents: flexJson }];
       }
+
+      main();
     </script>
   </body>
 </html>
