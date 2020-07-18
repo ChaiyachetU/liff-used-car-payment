@@ -112,9 +112,11 @@
         .init({ liffId: "1654462700-qD82g9dX" })
         .then(() => {
           if (liff.isLoggedIn()) {
-            alert("YouAreLoggedIn");
+            runApp();
           } else {
-            liff.login();
+            alert(
+              "This button is unavailable as LIFF is currently being opened in an external browser."
+            );
           }
         })
         .catch((err) => {
