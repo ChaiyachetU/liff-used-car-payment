@@ -112,8 +112,9 @@
         .init({ liffId: "1654462700-qD82g9dX" })
         .then(() => {
           if (liff.isLoggedIn()) {
-            alert("YouisLoggedIn");
-            runApp();
+            alert("YouAreLoggedIn");
+            let message = runApp();
+            console.log(message);
           } else {
             liff.login();
           }
