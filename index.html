@@ -24,9 +24,6 @@
       rel="stylesheet"
     />
 
-    <!-- Import autoNumeric -->
-    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0"></script>
-
     <!-- Set Style -->
     <style>
       body,
@@ -102,8 +99,18 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
+    <!-- Import autoNumeric -->
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0"></script>
+
+    <!-- Import js/vconsole.min.js to your project: https://github.com/Tencent/vConsole -->
+    <script src="js/vconsole.min.js"></script>
+
     <!-- Start Script For Get Form Values and Calculation -->
     <script>
+      // Init vConsole
+      var vConsole = new VConsole();
+      errorPlease();
+
       // Initialize AutoNumeric
       let car_price = new AutoNumeric("#carPrice", "integerPos");
       let down_paymentnew = new AutoNumeric("#downPayment", "integerPos");
