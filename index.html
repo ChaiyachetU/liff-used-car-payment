@@ -12,17 +12,20 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
 
-    <!--Import Google Icon Font-->
+    <!-- Import Google Icon Font -->
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
 
-    <!--Import Google Font-->
+    <!-- Import Google Font -->
     <link
       href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Import autoNumeric -->
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0"></script>
 
     <!-- Set Style -->
     <style>
@@ -73,26 +76,14 @@
           <!-- Start Car Price Input -->
           <div class="input-field">
             <label for="carPrice"><h6>ราคารถยนต์ (บาท)</h6></label>
-            <input
-              id="carPrice"
-              type="number"
-              min="0"
-              required
-              class="validate"
-            />
+            <input id="carPrice" type="text" required class="validate" />
           </div>
           <!-- End Car Price Input -->
 
           <!-- Start Down Payment Input -->
           <div class="input-field">
             <label for="downPayment"><h6>เงินดาวน์ (บาท)</h6></label>
-            <input
-              id="downPayment"
-              type="number"
-              min="0"
-              required
-              class="validate"
-            />
+            <input id="downPayment" type="text" required class="validate" />
           </div>
           <!-- End Down Payment Input -->
 
@@ -112,6 +103,9 @@
 
     <!-- Start Script For Get Form Values and Calculation -->
     <script>
+      // Initialize AutoNumeric
+      new AutoNumeric.multiple(["#carPrice", "#downPayment"], "integerPos");
+
       // Listen for form submit
       let form = document.getElementById("carForm");
       form.addEventListener("submit", submitForm);
