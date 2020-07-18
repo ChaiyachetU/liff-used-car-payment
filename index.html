@@ -31,7 +31,8 @@
     <style>
       body,
       select,
-      button {
+      button,
+      input {
         font-family: "Kanit", sans-serif;
       }
     </style>
@@ -50,7 +51,7 @@
 
       <!-- Start Form Content -->
       <div class="row">
-        <form id="carForm" class="col s12">
+        <form id="carForm" class="col s12" autocomplete="off">
           <!-- Start Select Car Years -->
           <label><h6>ปีจดทะเบียนรถยนต์</h6></label>
           <select
@@ -104,8 +105,8 @@
     <!-- Start Script For Get Form Values and Calculation -->
     <script>
       // Initialize AutoNumeric
-      new AutoNumeric("#carPrice", "integerPos");
-      new AutoNumeric("#downPayment", "integerPos");
+      let car_price = new AutoNumeric("#carPrice", "integerPos");
+      let down_paymentnew = new AutoNumeric("#downPayment", "integerPos");
 
       // Listen for form submit
       let form = document.getElementById("carForm");
@@ -116,11 +117,16 @@
         e.preventDefault();
         // Get values and set to number type
         let carYear = Number(getInputValue("carYear"));
-        let carPrice = Number(getInputValue("carPrice"));
-        let downPayment = Number(getInputValue("downPayment"));
+        let carPrice = Number(getInputValue("carPrice").replace(/,/g, ""));
+        let downPayment = Number(
+          getInputValue("downPayment").replace(/,/g, "")
+        );
 
         // Reset form
         form.reset();
+        // Rest AutoNumeric
+        car_price.clear(true);
+        down_paymentnew.clear(true);
 
         // Loan
         let loan = carPrice - downPayment;
