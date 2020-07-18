@@ -104,7 +104,8 @@
     <!-- Start Script For Get Form Values and Calculation -->
     <script>
       // Initialize AutoNumeric
-      new AutoNumeric.multiple(["#carPrice", "#downPayment"], "integerPos");
+      new AutoNumeric("#carPrice", "integerPos");
+      new AutoNumeric("#downPayment", "integerPos");
 
       // Listen for form submit
       let form = document.getElementById("carForm");
