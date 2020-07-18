@@ -102,14 +102,24 @@
     <!-- Import autoNumeric -->
     <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0"></script>
 
-    <!-- Import js/vconsole.min.js to your project: https://github.com/Tencent/vConsole -->
-    <script src="js/vconsole.min.js"></script>
+    <!-- Integrating the LIFF SDK -->
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
     <!-- Start Script For Get Form Values and Calculation -->
     <script>
-      // Init vConsole
-      var vConsole = new VConsole();
-      errorPlease();
+      // Initialize LIFF
+      liff
+        .init({ liffId: "1654462700-qD82g9dX" })
+        .then(() => {
+          if (liff.isLoggedIn()) {
+            alert("YouisLoggedIn");
+          } else {
+            liff.login();
+          }
+        })
+        .catch((err) => {
+          console.error(err.code, error.message);
+        });
 
       // Initialize AutoNumeric
       let car_price = new AutoNumeric("#carPrice", "integerPos");
