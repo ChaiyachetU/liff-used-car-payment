@@ -113,6 +113,7 @@
         .then(() => {
           if (liff.isLoggedIn()) {
             alert("YouisLoggedIn");
+            runApp();
           } else {
             liff.login();
           }
@@ -121,47 +122,50 @@
           console.error(err.code, error.message);
         });
 
-      // Initialize AutoNumeric
-      let car_price = new AutoNumeric("#carPrice", "integerPos");
-      let down_paymentnew = new AutoNumeric("#downPayment", "integerPos");
+      function runApp() {
+        // Initialize AutoNumeric
+        let car_price = new AutoNumeric("#carPrice", "integerPos");
+        let down_paymentnew = new AutoNumeric("#downPayment", "integerPos");
 
-      // Listen for form submit
-      let form = document.getElementById("carForm");
-      form.addEventListener("submit", submitForm);
+        // Listen for form submit
+        let form = document.getElementById("carForm");
+        form.addEventListener("submit", submitForm);
 
-      // Function form submit
-      function submitForm(e) {
-        e.preventDefault();
-        // Get values and set to number type
-        let carYear = Number(getInputValue("carYear"));
-        let carPrice = Number(getInputValue("carPrice").replace(/,/g, ""));
-        let downPayment = Number(
-          getInputValue("downPayment").replace(/,/g, "")
-        );
+        // Function form submit
+        function submitForm(e) {
+          e.preventDefault();
+          // Get values and set to number type
+          let carYear = Number(getInputValue("carYear"));
+          let carPrice = Number(getInputValue("carPrice").replace(/,/g, ""));
+          let downPayment = Number(
+            getInputValue("downPayment").replace(/,/g, "")
+          );
 
-        // Reset form
-        form.reset();
-        // Rest AutoNumeric
-        car_price.clear(true);
-        down_paymentnew.clear(true);
+          // Reset form
+          form.reset();
+          // Rest AutoNumeric
+          car_price.clear(true);
+          down_paymentnew.clear(true);
 
-        // Loan
-        let loan = carPrice - downPayment;
+          // Loan
+          let loan = carPrice - downPayment;
 
-        // Calculation installment payment
-        let resultCalculate = paymentCalculate(carYear, loan);
-        console.log(resultCalculate);
+          // Calculation installment payment
+          let resultCalculate = paymentCalculate(carYear, loan);
+          console.log(resultCalculate);
 
-        // Create flex message
-        let message = createFlexMessage(
-          carYear,
-          carPrice,
-          downPayment,
-          loan,
-          resultCalculate
-        );
+          // Create flex message
+          let message = createFlexMessage(
+            carYear,
+            carPrice,
+            downPayment,
+            loan,
+            resultCalculate
+          );
 
-        console.log(JSON.stringify(message));
+          // console.log(JSON.stringify(message));
+          return message;
+        }
       }
 
       // Function to get get form values
