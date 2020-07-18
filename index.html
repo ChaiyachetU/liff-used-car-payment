@@ -114,7 +114,7 @@
           if (liff.isLoggedIn()) {
             runApp();
           } else {
-            liff.login();
+            liff.login({ redirectUri: "https://shop.line.me/@623evzmw" });
           }
         })
         .catch((err) => {
