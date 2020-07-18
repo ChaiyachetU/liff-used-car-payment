@@ -238,8 +238,8 @@
       // Function convert a number into a locale-specific numeric representation of the number
       function numberToString(number) {
         return number.toLocaleString("en-US", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
         });
       }
 
@@ -252,9 +252,9 @@
         resultCalculate
       ) {
         let carYearTxt = new Date().getFullYear() - carYear;
-        let carPriceTxt = carPrice.toFixed(0);
-        let downPaymentTxt = downPayment.toFixed(0);
-        let loanTxt = loan.toFixed(0);
+        let carPriceTxt = numberToString(carPrice);
+        let downPaymentTxt = numberToString(downPayment);
+        let loanTxt = numberToString(loan);
 
         let interestRate36 = resultCalculate[36].interestRate;
         let installment36 = resultCalculate[36].installment;
