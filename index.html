@@ -194,22 +194,22 @@
             break;
           case 6:
           case 7:
-            console.log("carYear 6-7 years");
+            // console.log("carYear 6-7 years");
             var interestRate = { 36: 4.15, 48: 4.15, 60: 4.7, 72: 5.5 }; // term: interest rate
             return interestCalculation(loan, interestRate);
             break;
           case 8:
-            console.log("carYear 8 years");
+            // console.log("carYear 8 years");
             var interestRate = { 36: 4.5, 48: 4.5, 60: 5.25, 72: 5.75 }; // term: interest rate
             return interestCalculation(loan, interestRate);
             break;
           case 9:
-            console.log("carYear 9 years");
+            // console.log("carYear 9 years");
             var interestRate = { 36: 4.55, 48: 4.55, 60: 5.3, 72: 5.8 }; // term: interest rate
             return interestCalculation(loan, interestRate);
             break;
           case 10:
-            console.log("carYear 10 years");
+            // console.log("carYear 10 years");
             var interestRate = { 36: 4.8, 48: 4.8, 60: 5.55, 72: 6.3 };
             return interestCalculation(loan, interestRate);
         }
@@ -252,9 +252,9 @@
         resultCalculate
       ) {
         let carYearTxt = new Date().getFullYear() - carYear;
-        let carPriceTxt = numberToString(carPrice);
-        let downPaymentTxt = numberToString(downPayment);
-        let loanTxt = numberToString(loan);
+        let carPriceTxt = carPrice.toFixed(0);
+        let downPaymentTxt = downPayment.toFixed(0);
+        let loanTxt = loan.toFixed(0);
 
         let interestRate36 = resultCalculate[36].interestRate;
         let installment36 = resultCalculate[36].installment;
