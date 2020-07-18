@@ -114,9 +114,7 @@
           if (liff.isLoggedIn()) {
             runApp();
           } else {
-            alert(
-              "This button is unavailable as LIFF is currently being opened in an external browser."
-            );
+            liff.login();
           }
         })
         .catch((err) => {
@@ -164,7 +162,15 @@
             resultCalculate
           );
 
-          console.log(JSON.stringify(message));
+          // console.log(JSON.stringify(message));
+          liff
+            .sendMessages(message)
+            .then(() => {
+              liff.closeWindow();
+            })
+            .catch((err) => {
+              console.error(err.code, error.message);
+            });
         }
       }
 
