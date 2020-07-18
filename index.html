@@ -113,8 +113,6 @@
         .then(() => {
           if (liff.isLoggedIn()) {
             alert("YouAreLoggedIn");
-            let message = runApp();
-            console.log(JSON.stringify(message));
           } else {
             liff.login();
           }
@@ -164,8 +162,7 @@
             resultCalculate
           );
 
-          // console.log(JSON.stringify(message));
-          return message;
+          console.log(JSON.stringify(message));
         }
       }
 
