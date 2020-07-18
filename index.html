@@ -163,14 +163,22 @@
           );
 
           // console.log(JSON.stringify(message));
-          liff
-            .sendMessages(message)
-            .then(() => {
-              liff.closeWindow();
-            })
-            .catch((err) => {
-              console.error(err.code, error.message);
-            });
+
+          // Sends messages on behalf of the user to the chat screen where the LIFF app is opened.
+          if (
+            liff.getContext().type !== "none" &&
+            liff.getContext().type !== "external"
+          ) {
+            // Send messages
+            liff
+              .sendMessages(message)
+              .then(() => {
+                liff.closeWindow();
+              })
+              .catch((err) => {
+                console.error(err.code, error.message);
+              });
+          }
         }
       }
 
