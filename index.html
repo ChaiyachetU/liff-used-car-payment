@@ -138,11 +138,7 @@
       liff
         .init({ liffId: "1654462700-qD82g9dX" })
         .then(() => {
-          if (liff.isLoggedIn()) {
-            runApp();
-          } else {
-            liff.login();
-          }
+          runApp();
         })
         .catch((err) => {
           console.error(err.code, error.message);
@@ -195,7 +191,6 @@
               loan,
               resultCalculate
             );
-            // console.log(JSON.stringify(message));
 
             // Send messages
             liff
@@ -505,7 +500,7 @@
                       {
                         type: "text",
                         text: "ยอดจัดไฟแนนซ์",
-                        size: "lg",
+                        size: "md",
                         weight: "bold",
                       },
                     ],
