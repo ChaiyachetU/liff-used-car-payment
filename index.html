@@ -94,6 +94,19 @@
       </div>
       <!-- End Form Content -->
 
+      <!-- Start Logout Button -->
+      <!-- <div class="row">
+        <button
+          id="btnLogOut"
+          class="btn waves-effect waves-light"
+          onclick="logOut()"
+        >
+          Log Out
+        </button>
+      </div> -->
+
+      <!-- End Logout Button -->
+
       <!-- Start Table Content -->
       <div id="result"></div>
       <!-- End Table Content -->
@@ -122,20 +135,20 @@
     <!-- Start Script For Get Form Values and Calculation -->
     <script>
       // Initialize LIFF
-      // liff
-      //   .init({ liffId: "1654462700-qD82g9dX" })
-      //   .then(() => {
-      //     if (liff.isLoggedIn()) {
-      //       runApp();
-      //     } else {
-      //       liff.login();
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     console.error(err.code, error.message);
-      //   });
+      liff
+        .init({ liffId: "1654462700-qD82g9dX" })
+        .then(() => {
+          if (liff.isLoggedIn()) {
+            runApp();
+          } else {
+            liff.login();
+          }
+        })
+        .catch((err) => {
+          console.error(err.code, error.message);
+        });
 
-      runApp();
+      // runApp();
 
       function runApp() {
         // Initialize AutoNumeric
@@ -169,42 +182,40 @@
           let resultCalculate = paymentCalculate(carYear, loan);
           // console.log(resultCalculate);
 
-          // Result table
-          createResultTable(
-            carYear,
-            carPrice,
-            downPayment,
-            loan,
-            resultCalculate
-          );
-
-          // Create flex message
-          let message = createFlexMessage(
-            carYear,
-            carPrice,
-            downPayment,
-            loan,
-            resultCalculate
-          );
-
-          // console.log(JSON.stringify(message));
-
           // Sends messages on behalf of the user to the chat screen where the LIFF app is opened.
-          // if (
-          //   liff.getContext().type !== "none" &&
-          //   liff.getContext().type !== "external"
-          // ) {
+          if (
+            liff.getContext().type !== "none" &&
+            liff.getContext().type !== "external"
+          ) {
+            // Create flex message
+            let message = createFlexMessage(
+              carYear,
+              carPrice,
+              downPayment,
+              loan,
+              resultCalculate
+            );
+            // console.log(JSON.stringify(message));
 
-          //   // Send messages
-          //   liff
-          //     .sendMessages(message)
-          //     .then(() => {
-          //       liff.closeWindow();
-          //     })
-          //     .catch((err) => {
-          //       console.error(err.code, error.message);
-          //     });
-          // }
+            // Send messages
+            liff
+              .sendMessages(message)
+              .then(() => {
+                liff.closeWindow();
+              })
+              .catch((err) => {
+                console.error(err.code, error.message);
+              });
+          } else {
+            // Result table
+            createResultTable(
+              carYear,
+              carPrice,
+              downPayment,
+              loan,
+              resultCalculate
+            );
+          }
         }
       }
 
@@ -699,6 +710,13 @@
 
         return [{ type: "flex", altText: "คำนวณค่างวดรถ", contents: flexJson }];
       }
+
+      // // LIFF logout from external browser
+      // function logOut() {
+      //   // Logs out.
+      //   liff.logout();
+      //   window.location.reload();
+      // }
     </script>
   </body>
 </html>
