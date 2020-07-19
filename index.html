@@ -94,19 +94,6 @@
       </div>
       <!-- End Form Content -->
 
-      <!-- Start Logout Button -->
-      <!-- <div class="row">
-        <button
-          id="btnLogOut"
-          class="btn waves-effect waves-light"
-          onclick="logOut()"
-        >
-          Log Out
-        </button>
-      </div> -->
-
-      <!-- End Logout Button -->
-
       <!-- Start Table Content -->
       <div id="result"></div>
       <!-- End Table Content -->
@@ -145,7 +132,6 @@
         });
 
       // runApp();
-
       function runApp() {
         // Initialize AutoNumeric
         let car_price = new AutoNumeric("#carPrice", "integerPos");
@@ -499,12 +485,12 @@
                     contents: [
                       {
                         type: "text",
-                        text: "ยอดจัดไฟแนนซ์",
-                        size: "md",
+                        text: "ยอดจัด",
+                        size: "lg",
                         weight: "bold",
                       },
                     ],
-                    width: "150px",
+                    width: "100px",
                   },
                   {
                     type: "box",
@@ -705,13 +691,6 @@
 
         return [{ type: "flex", altText: "คำนวณค่างวดรถ", contents: flexJson }];
       }
-
-      // // LIFF logout from external browser
-      // function logOut() {
-      //   // Logs out.
-      //   liff.logout();
-      //   window.location.reload();
-      // }
     </script>
   </body>
 </html>
