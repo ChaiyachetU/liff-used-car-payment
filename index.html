@@ -7,22 +7,13 @@
     <title>Used Car Payment Calculator</title>
 
     <!-- Compiled and minified CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
 
     <!-- Import Google Icon Font -->
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
     <!-- Import Google Font -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap" rel="stylesheet" />
 
     <!-- Set Style -->
     <style>
@@ -51,23 +42,18 @@
         <form id="carForm" class="col s12" autocomplete="off">
           <!-- Start Select Car Years -->
           <label><h6>ปีจดทะเบียนรถยนต์</h6></label>
-          <select
-            id="carYear"
-            class="browser-default"
-            required
-            class="validate"
-          >
+          <select id="carYear" class="browser-default" required class="validate">
             <option value="" disabled selected>กรุณาเลือกปีจดทะเบียน</option>
-            <option value="1">2019</option>
-            <option value="2">2018</option>
-            <option value="3">2017</option>
-            <option value="4">2016</option>
-            <option value="5">2015</option>
-            <option value="6">2014</option>
-            <option value="7">2013</option>
-            <option value="8">2012</option>
-            <option value="9">2011</option>
-            <option value="10">2010</option>
+            <option value="1">2020</option>
+            <option value="2">2019</option>
+            <option value="3">2018</option>
+            <option value="4">2017</option>
+            <option value="5">2016</option>
+            <option value="6">2015</option>
+            <option value="7">2014</option>
+            <option value="8">2013</option>
+            <option value="9">2012</option>
+            <option value="10">2011</option>
           </select>
           <!-- End Select Car Years -->
 
@@ -86,9 +72,7 @@
           <!-- End Down Payment Input -->
 
           <!-- Start Submit Button -->
-          <button id="btn" class="btn waves-effect waves-light" type="submit">
-            คำนวณ
-          </button>
+          <button id="btn" class="btn waves-effect waves-light" type="submit">คำนวณ</button>
           <!-- End Submit Button -->
         </form>
       </div>
@@ -123,7 +107,7 @@
     <script>
       // Initialize LIFF
       liff
-        .init({ liffId: "Your LIFF ID" })
+        .init({ liffId: "1654462700-qD82g9dX" })
         .then(() => {
           runApp();
         })
@@ -147,9 +131,7 @@
           // Get values and set to number type
           let carYear = Number(getInputValue("carYear"));
           let carPrice = Number(getInputValue("carPrice").replace(/,/g, ""));
-          let downPayment = Number(
-            getInputValue("downPayment").replace(/,/g, "")
-          );
+          let downPayment = Number(getInputValue("downPayment").replace(/,/g, ""));
 
           // Reset form
           form.reset();
@@ -165,18 +147,9 @@
           // console.log(resultCalculate);
 
           // Sends messages on behalf of the user to the chat screen where the LIFF app is opened.
-          if (
-            liff.getContext().type !== "none" &&
-            liff.getContext().type !== "external"
-          ) {
+          if (liff.getContext().type !== "none" && liff.getContext().type !== "external") {
             // Create flex message
-            let message = createFlexMessage(
-              carYear,
-              carPrice,
-              downPayment,
-              loan,
-              resultCalculate
-            );
+            let message = createFlexMessage(carYear, carPrice, downPayment, loan, resultCalculate);
 
             // Send messages
             liff
@@ -189,13 +162,7 @@
               });
           } else {
             // Result table
-            createResultTable(
-              carYear,
-              carPrice,
-              downPayment,
-              loan,
-              resultCalculate
-            );
+            createResultTable(carYear, carPrice, downPayment, loan, resultCalculate);
           }
         }
       }
@@ -215,28 +182,28 @@
           case 4:
           case 5:
             // console.log("carYear <= 5 years");
-            var interestRate = { 36: 3.9, 48: 3.9, 60: 4.2, 72: 5.25 }; // term: interest rate
+            var interestRate = { 36: 3.9, 48: 3.9, 60: 4.4, 72: 5.25, 84: 6.95 }; // term: interest rate
             return interestCalculation(loan, interestRate);
             break;
           case 6:
           case 7:
             // console.log("carYear 6-7 years");
-            var interestRate = { 36: 4.15, 48: 4.15, 60: 4.7, 72: 5.5 }; // term: interest rate
+            var interestRate = { 36: 4.35, 48: 4.35, 60: 4.7, 72: 5.5, 84: 7.35 }; // term: interest rate
             return interestCalculation(loan, interestRate);
             break;
           case 8:
             // console.log("carYear 8 years");
-            var interestRate = { 36: 4.5, 48: 4.5, 60: 5.25, 72: 5.75 }; // term: interest rate
+            var interestRate = { 36: 4.65, 48: 4.65, 60: 5.3, 72: 5.95, 84: 7.75 }; // term: interest rate
             return interestCalculation(loan, interestRate);
             break;
           case 9:
             // console.log("carYear 9 years");
-            var interestRate = { 36: 4.55, 48: 4.55, 60: 5.3, 72: 5.8 }; // term: interest rate
+            var interestRate = { 36: 4.65, 48: 4.65, 60: 5.3, 72: 5.95, 84: 7.75 }; // term: interest rate
             return interestCalculation(loan, interestRate);
             break;
           case 10:
             // console.log("carYear 10 years");
-            var interestRate = { 36: 4.8, 48: 4.8, 60: 5.55, 72: 6.3 };
+            var interestRate = { 36: 5.7, 48: 5.7, 60: 6.25, 72: 7.25, 84: 8.75 }; // term: interest rate
             return interestCalculation(loan, interestRate);
         }
       }
@@ -270,13 +237,7 @@
       }
 
       // Create result table
-      function createResultTable(
-        carYear,
-        carPrice,
-        downPayment,
-        loan,
-        resultCalculate
-      ) {
+      function createResultTable(carYear, carPrice, downPayment, loan, resultCalculate) {
         let carYearTxt = new Date().getFullYear() - carYear;
         let carPriceTxt = numberToString(carPrice);
         let downPaymentTxt = numberToString(downPayment);
@@ -290,10 +251,10 @@
         let installment60 = resultCalculate[60].installment;
         let interestRate72 = resultCalculate[72].interestRate;
         let installment72 = resultCalculate[72].installment;
+        let interestRate84 = resultCalculate[84].interestRate;
+        let installment84 = resultCalculate[84].installment;
 
-        document.getElementById(
-          "result"
-        ).innerHTML = `<!-- Add Table Data wiht Script -->
+        document.getElementById("result").innerHTML = `<!-- Add Table Data wiht Script -->
         <table class="responsive-table">
           <thead>
             <tr>
@@ -305,6 +266,7 @@
               <th>48 งวด (${interestRate48}%)</th>
               <th>60 งวด (${interestRate60}%)</th>
               <th>72 งวด (${interestRate72}%)</th>
+              <th>72 งวด (${interestRate84}%)</th>
             </tr>
           </thead>
 
@@ -318,6 +280,7 @@
               <td>${installment48}</td>
               <td>${installment60}</td>
               <td>${installment72}</td>
+              <td>${installment84}</td>
             </tr>
           </tbody>
         </table>
@@ -330,13 +293,7 @@
       }
 
       // Creat flex message
-      function createFlexMessage(
-        carYear,
-        carPrice,
-        downPayment,
-        loan,
-        resultCalculate
-      ) {
+      function createFlexMessage(carYear, carPrice, downPayment, loan, resultCalculate) {
         let carYearTxt = new Date().getFullYear() - carYear;
         let carPriceTxt = numberToString(carPrice);
         let downPaymentTxt = numberToString(downPayment);
@@ -350,9 +307,377 @@
         let installment60 = resultCalculate[60].installment;
         let interestRate72 = resultCalculate[72].interestRate;
         let installment72 = resultCalculate[72].installment;
+        let interestRate84 = resultCalculate[84].interestRate;
+        let installment84 = resultCalculate[84].installment;
 
         // Using flex message simulator for json
-        let flexJson = {};
+        let flexJson = {
+          type: "bubble",
+          size: "giga",
+          body: {
+            type: "box",
+            layout: "vertical",
+            contents: [
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "text",
+                    text: "P Auto 095-826-3339",
+                    size: "xl",
+                    color: "#0551c2ff",
+                    weight: "bold",
+                    align: "center",
+                  },
+                ],
+              },
+              {
+                type: "separator",
+                margin: "lg",
+              },
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: "ปีจดทะเบียนรถยนต์",
+                        size: "md",
+                        weight: "bold",
+                      },
+                    ],
+                    width: "150px",
+                  },
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: `${carYearTxt}`,
+                        size: "md",
+                        weight: "bold",
+                        align: "end",
+                      },
+                    ],
+                  },
+                ],
+                margin: "lg",
+              },
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: "ราคารถยนต์",
+                        size: "md",
+                        weight: "bold",
+                      },
+                    ],
+                    width: "100px",
+                  },
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: `${carPriceTxt} บาท`,
+                        size: "md",
+                        weight: "bold",
+                        align: "end",
+                      },
+                    ],
+                  },
+                ],
+                margin: "lg",
+              },
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: "เงินดาวน์",
+                        size: "md",
+                        weight: "bold",
+                      },
+                    ],
+                    width: "100px",
+                  },
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: `${downPaymentTxt} บาท`,
+                        size: "md",
+                        weight: "bold",
+                        align: "end",
+                      },
+                    ],
+                  },
+                ],
+                margin: "lg",
+              },
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: "ยอดจัด",
+                        size: "lg",
+                        weight: "bold",
+                      },
+                    ],
+                    width: "100px",
+                  },
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: `${loanTxt} บาท`,
+                        size: "lg",
+                        weight: "bold",
+                        align: "end",
+                      },
+                    ],
+                  },
+                ],
+                margin: "lg",
+              },
+              {
+                type: "separator",
+                margin: "lg",
+              },
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: "ค่างวด",
+                        size: "md",
+                      },
+                    ],
+                  },
+                ],
+                margin: "lg",
+              },
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: `36 งวด (${interestRate36}%)`,
+                        size: "sm",
+                      },
+                    ],
+                    width: "100px",
+                  },
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: `${installment36} บาท`,
+                        size: "sm",
+                        align: "end",
+                        weight: "bold",
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: `48 งวด (${interestRate48}%)`,
+                        size: "sm",
+                      },
+                    ],
+                    width: "100px",
+                  },
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: `${installment48} บาท`,
+                        size: "sm",
+                        align: "end",
+                        weight: "bold",
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: `60 งวด (${interestRate60}%)`,
+                        size: "sm",
+                      },
+                    ],
+                    width: "100px",
+                  },
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: `${installment60} บาท`,
+                        size: "sm",
+                        align: "end",
+                        weight: "bold",
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: `72 งวด (${interestRate72}%)`,
+                        size: "sm",
+                      },
+                    ],
+                    width: "100px",
+                  },
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: `${installment72} บาท`,
+                        size: "sm",
+                        align: "end",
+                        weight: "bold",
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: `84 งวด (${interestRate84}%)`,
+                        size: "sm",
+                      },
+                    ],
+                    width: "100px",
+                  },
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
+                      {
+                        type: "text",
+                        text: `${installment84} บาท`,
+                        size: "sm",
+                        align: "end",
+                        weight: "bold",
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                type: "separator",
+                margin: "lg",
+              },
+              {
+                type: "text",
+                text: "*ราคาค่างวดยังไม่รวม VAT\n*สำหรับพิจารณาข้อมูลเบื้องต้นไม่สามารถนำไปอ้างอิงในการซื้อขายได้",
+                size: "xxs",
+                weight: "bold",
+                margin: "lg",
+                align: "center",
+                color: "#e8505b",
+                wrap: true,
+              },
+            ],
+            spacing: "md",
+          },
+          footer: {
+            type: "box",
+            layout: "vertical",
+            contents: [
+              {
+                type: "button",
+                action: {
+                  type: "uri",
+                  label: "สอบถามเพิ่มเติม",
+                  uri: "tel:0958263339",
+                },
+                style: "primary",
+              },
+            ],
+          },
+        };
 
         return [{ type: "flex", altText: "คำนวณค่างวดรถ", contents: flexJson }];
       }
