@@ -7,13 +7,22 @@
     <title>Used Car Payment Calculator</title>
 
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
 
     <!-- Import Google Icon Font -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
 
     <!-- Import Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Set Style -->
     <style>
@@ -40,6 +49,27 @@
       <!-- Start Form Content -->
       <div class="row">
         <form id="carForm" class="col s12" autocomplete="off">
+          <!-- Start Check Customer Type -->
+          <p>
+            <label>
+              <input
+                class="with-gap"
+                name="customer"
+                type="radio"
+                value="promotion"
+                checked
+              />
+              <span style="margin-right: 24px">ลูกค้าประวัติดี</span>
+            </label>
+            <!-- </p>
+          <p> -->
+            <label>
+              <input class="with-gap" name="customer" value="normal" type="radio" />
+              <span>ลูกค้าทั่วไป</span>
+            </label>
+          </p>
+          <!-- End Check Customer Type -->
+
           <!-- Start Select Car Years -->
           <label><h6>ปีจดทะเบียนรถยนต์</h6></label>
           <select id="carYear" class="browser-default" required class="validate">
@@ -52,8 +82,6 @@
             <option value="6">2015</option>
             <option value="7">2014</option>
             <option value="8">2013</option>
-            <option value="9">2012</option>
-            <option value="10">2011</option>
           </select>
           <!-- End Select Car Years -->
 
@@ -72,7 +100,9 @@
           <!-- End Down Payment Input -->
 
           <!-- Start Submit Button -->
-          <button id="btn" class="btn waves-effect waves-light" type="submit">คำนวณ</button>
+          <button id="btn" class="btn waves-effect waves-light" type="submit">
+            คำนวณ
+          </button>
           <!-- End Submit Button -->
         </form>
       </div>
@@ -85,7 +115,7 @@
       <!-- Start Footer -->
       <div id="footer" class="center-align">
         <p>
-          © 2020 P Auto
+          © 2021 P Auto
           <br />
           โทร. 095-826-3339
         </p>
@@ -125,6 +155,40 @@
         let form = document.getElementById("carForm");
         form.addEventListener("submit", submitForm);
 
+        // Listen for check customer change
+        document.querySelectorAll('input[name="customer"]').forEach((customer) => {
+          customer.addEventListener("click", function (e) {
+            if (e.target.checked && e.target.value === "normal") {
+              document.getElementById("carYear").innerHTML = `
+                <option value="" disabled selected>กรุณาเลือกปีจดทะเบียน</option>
+                <option value="1">2020</option>
+                <option value="2">2019</option>
+                <option value="3">2018</option>
+                <option value="4">2017</option>
+                <option value="5">2016</option>
+                <option value="6">2015</option>
+                <option value="7">2014</option>
+                <option value="8">2013</option>
+                <option value="9">2012</option>
+                <option value="10">2011</option>
+              `;
+            }
+            if (e.target.checked && e.target.value === "promotion") {
+              document.getElementById("carYear").innerHTML = `
+                <option value="" disabled selected>กรุณาเลือกปีจดทะเบียน</option>
+                <option value="1">2020</option>
+                <option value="2">2019</option>
+                <option value="3">2018</option>
+                <option value="4">2017</option>
+                <option value="5">2016</option>
+                <option value="6">2015</option>
+                <option value="7">2014</option>
+                <option value="8">2013</option>
+              `;
+            }
+          });
+        });
+
         // Function form submit
         function submitForm(e) {
           e.preventDefault();
@@ -132,9 +196,18 @@
           let carYear = Number(getInputValue("carYear"));
           let carPrice = Number(getInputValue("carPrice").replace(/,/g, ""));
           let downPayment = Number(getInputValue("downPayment").replace(/,/g, ""));
+          let customers = document.querySelectorAll('input[name="customer"]');
+          let customerType;
+          customers.forEach((customer) => {
+            if (customer.checked) {
+              customerType = customer.value;
+              // console.log(customerType);
+            }
+          });
 
           // Reset form
           form.reset();
+
           // Rest AutoNumeric
           car_price.clear(true);
           down_paymentnew.clear(true);
@@ -143,13 +216,23 @@
           let loan = carPrice - downPayment;
 
           // Calculation installment payment
-          let resultCalculate = paymentCalculate(carYear, loan);
+          let resultCalculate = paymentCalculate(carYear, loan, customerType);
           // console.log(resultCalculate);
 
           // Sends messages on behalf of the user to the chat screen where the LIFF app is opened.
-          if (liff.getContext().type !== "none" && liff.getContext().type !== "external") {
+          if (
+            liff.getContext().type !== "none" &&
+            liff.getContext().type !== "external"
+          ) {
             // Create flex message
-            let message = createFlexMessage(carYear, carPrice, downPayment, loan, resultCalculate);
+            let message = createFlexMessage(
+              carYear,
+              carPrice,
+              downPayment,
+              loan,
+              resultCalculate,
+              customerType
+            );
 
             // Send messages
             liff
@@ -161,8 +244,15 @@
                 console.error(err.code, error.message);
               });
           } else {
-            // Result table
-            createResultTable(carYear, carPrice, downPayment, loan, resultCalculate);
+            // Result table in browser
+            createResultTable(
+              carYear,
+              carPrice,
+              downPayment,
+              loan,
+              resultCalculate,
+              customerType
+            );
           }
         }
       }
@@ -173,41 +263,67 @@
       }
 
       // Function payment calculation
-      function paymentCalculate(carYear, loan) {
-        // term: interest rate
-        const interestRates = {
-          5: { 36: 3.9, 48: 3.9, 60: 4.4, 72: 5.25, 84: 6.95 },
-          7: { 36: 4.35, 48: 4.35, 60: 4.7, 72: 5.5, 84: 7.35 },
-          8: { 36: 4.65, 48: 4.65, 60: 5.3, 72: 5.95, 84: 7.75 },
-          9: { 36: 4.65, 48: 4.65, 60: 5.3, 72: 5.95, 84: 7.75 },
-          10: { 36: 5.7, 48: 5.7, 60: 6.25, 72: 7.25, 84: 8.75 },
-        };
-        // Check car year for interest rate
-        switch (carYear) {
-          case 1:
-          case 2:
-          case 3:
-          case 4:
-          case 5:
-            // console.log("carYear <= 5 years");
-            return interestCalculation(loan, interestRates[5]);
-            break;
-          case 6:
-          case 7:
-            // console.log("carYear 6-7 years");
-            return interestCalculation(loan, interestRates[7]);
-            break;
-          case 8:
-            // console.log("carYear 8 years");
-            return interestCalculation(loan, interestRates[8]);
-            break;
-          case 9:
-            // console.log("carYear 9 years");
-            return interestCalculation(loan, interestRates[9]);
-            break;
-          case 10:
-            // console.log("carYear 10 years");
-            return interestCalculation(loan, interestRates[10]);
+      function paymentCalculate(carYear, loan, customerType) {
+        if (customerType === "normal") {
+          // console.log("Normal customer calculation Oh yay!");
+          // term: interest rate
+          const interestRates = {
+            5: { 36: 3.9, 48: 3.9, 60: 4.4, 72: 5.25, 84: 6.95 },
+            7: { 36: 4.35, 48: 4.35, 60: 4.7, 72: 5.5, 84: 7.35 },
+            8: { 36: 4.65, 48: 4.65, 60: 5.3, 72: 5.95, 84: 7.75 },
+            9: { 36: 4.65, 48: 4.65, 60: 5.3, 72: 5.95, 84: 7.75 },
+            10: { 36: 5.7, 48: 5.7, 60: 6.25, 72: 7.25, 84: 8.75 },
+          };
+          // Check car year for interest rate
+          switch (carYear) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+              // console.log("carYear <= 5 years");
+              return interestCalculation(loan, interestRates[5]);
+              break;
+            case 6:
+            case 7:
+              // console.log("carYear 6-7 years");
+              return interestCalculation(loan, interestRates[7]);
+              break;
+            case 8:
+              // console.log("carYear 8 years");
+              return interestCalculation(loan, interestRates[8]);
+              break;
+            case 9:
+              // console.log("carYear 9 years");
+              return interestCalculation(loan, interestRates[9]);
+              break;
+            case 10:
+              // console.log("carYear 10 years");
+              return interestCalculation(loan, interestRates[10]);
+          }
+        } else {
+          // console.log("Promotion customer calculation Woohooo!");
+          // term: interest rate
+          const interestRates = {
+            5: { 48: 2.79, 60: 2.99, 72: 3.89 },
+            8: { 48: 2.99, 60: 3.29, 72: 4.25 },
+          };
+          // Check car year for interest rate
+          switch (carYear) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+              // console.log("carYear <= 5 years");
+              return interestCalculation(loan, interestRates[5]);
+              break;
+            case 6:
+            case 7:
+            case 8:
+              // console.log("carYear <= 8 years");
+              return interestCalculation(loan, interestRates[8]);
+          }
         }
       }
 
@@ -240,449 +356,830 @@
       }
 
       // Create result table
-      function createResultTable(carYear, carPrice, downPayment, loan, resultCalculate) {
+      function createResultTable(
+        carYear,
+        carPrice,
+        downPayment,
+        loan,
+        resultCalculate,
+        customerType
+      ) {
         let carYearTxt = new Date().getFullYear() - carYear;
         let carPriceTxt = numberToString(carPrice);
         let downPaymentTxt = numberToString(downPayment);
         let loanTxt = numberToString(loan);
 
-        let interestRate36 = resultCalculate[36].interestRate;
-        let installment36 = resultCalculate[36].installment;
+        let interestRate36 =
+          resultCalculate[36] !== undefined
+            ? resultCalculate[36].interestRate
+            : null;
+        let installment36 =
+          resultCalculate[36] !== undefined ? resultCalculate[36].installment : null;
         let interestRate48 = resultCalculate[48].interestRate;
         let installment48 = resultCalculate[48].installment;
         let interestRate60 = resultCalculate[60].interestRate;
         let installment60 = resultCalculate[60].installment;
         let interestRate72 = resultCalculate[72].interestRate;
         let installment72 = resultCalculate[72].installment;
-        let interestRate84 = resultCalculate[84].interestRate;
-        let installment84 = resultCalculate[84].installment;
+        let interestRate84 =
+          resultCalculate[84] !== undefined
+            ? resultCalculate[84].interestRate
+            : null;
+        let installment84 =
+          resultCalculate[84] !== undefined ? resultCalculate[84].installment : null;
 
-        document.getElementById("result").innerHTML = `<!-- Add Table Data wiht Script -->
-        <table class="responsive-table">
-          <thead>
-            <tr>
-              <th>ปีจดทะเบียนรถยนต์</th>
-              <th>ราคารถยนต์</th>
-              <th>เงินดาวน์</th>
-              <th>ยอดจัดไฟแนนซ์</th>
-              <th>36 งวด (${interestRate36}%)</th>
-              <th>48 งวด (${interestRate48}%)</th>
-              <th>60 งวด (${interestRate60}%)</th>
-              <th>72 งวด (${interestRate72}%)</th>
-              <th>72 งวด (${interestRate84}%)</th>
-            </tr>
-          </thead>
+        if (customerType === "normal") {
+          document.getElementById(
+            "result"
+          ).innerHTML = `<!-- Add Table Data wiht Script -->
+            <table class="responsive-table">
+              <thead>
+                <tr>
+                  <th>ปีจดทะเบียนรถยนต์</th>
+                  <th>ราคารถยนต์</th>
+                  <th>เงินดาวน์</th>
+                  <th>ยอดจัดไฟแนนซ์</th>
+                  <th>36 งวด (${interestRate36}%)</th>
+                  <th>48 งวด (${interestRate48}%)</th>
+                  <th>60 งวด (${interestRate60}%)</th>
+                  <th>72 งวด (${interestRate72}%)</th>
+                  <th>84 งวด (${interestRate84}%)</th>
+                </tr>
+              </thead>
 
-          <tbody>
-            <tr>
-              <td>${carYearTxt}</td>
-              <td>${carPriceTxt}</td>
-              <td>${downPaymentTxt}</td>
-              <td>${loanTxt}</td>
-              <td>${installment36}</td>
-              <td>${installment48}</td>
-              <td>${installment60}</td>
-              <td>${installment72}</td>
-              <td>${installment84}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="red-text">
-          <p>*ราคาค่างวดยังไม่รวม VAT</p>
-          <p>
-            **สำหรับพิจารณาข้อมูลเบื้องต้นไม่สามารถนำไปอ้างอิงในการซื้อขายได้
-          </p>
-        </div>`;
+              <tbody>
+                <tr>
+                  <td>${carYearTxt}</td>
+                  <td>${carPriceTxt}</td>
+                  <td>${downPaymentTxt}</td>
+                  <td>${loanTxt}</td>
+                  <td>${installment36}</td>
+                  <td>${installment48}</td>
+                  <td>${installment60}</td>
+                  <td>${installment72}</td>
+                  <td>${installment84}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="red-text">
+              <p>*ราคาค่างวดยังไม่รวม VAT</p>
+              <p>
+                **สำหรับพิจารณาข้อมูลเบื้องต้นไม่สามารถนำไปอ้างอิงในการซื้อขายได้
+              </p>
+            </div>`;
+        } else {
+          document.getElementById(
+            "result"
+          ).innerHTML = `<!-- Add Table Data wiht Script -->
+            <table class="responsive-table">
+              <thead>
+                <tr>
+                  <th>ปีจดทะเบียนรถยนต์</th>
+                  <th>ราคารถยนต์</th>
+                  <th>เงินดาวน์</th>
+                  <th>ยอดจัดไฟแนนซ์</th>
+                  <th>48 งวด (${interestRate48}%)</th>
+                  <th>60 งวด (${interestRate60}%)</th>
+                  <th>72 งวด (${interestRate72}%)</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>${carYearTxt}</td>
+                  <td>${carPriceTxt}</td>
+                  <td>${downPaymentTxt}</td>
+                  <td>${loanTxt}</td>
+                  <td>${installment48}</td>
+                  <td>${installment60}</td>
+                  <td>${installment72}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="red-text">
+              <p>*ราคาค่างวดยังไม่รวม VAT</p>
+              <p>
+                **สำหรับพิจารณาข้อมูลเบื้องต้นไม่สามารถนำไปอ้างอิงในการซื้อขายได้
+              </p>
+            </div>`;
+        }
       }
 
       // Creat flex message
-      function createFlexMessage(carYear, carPrice, downPayment, loan, resultCalculate) {
+      function createFlexMessage(
+        carYear,
+        carPrice,
+        downPayment,
+        loan,
+        resultCalculate,
+        customerType
+      ) {
         let carYearTxt = new Date().getFullYear() - carYear;
         let carPriceTxt = numberToString(carPrice);
         let downPaymentTxt = numberToString(downPayment);
         let loanTxt = numberToString(loan);
 
-        let interestRate36 = resultCalculate[36].interestRate;
-        let installment36 = resultCalculate[36].installment;
-        let interestRate48 = resultCalculate[48].interestRate;
-        let installment48 = resultCalculate[48].installment;
-        let interestRate60 = resultCalculate[60].interestRate;
-        let installment60 = resultCalculate[60].installment;
-        let interestRate72 = resultCalculate[72].interestRate;
-        let installment72 = resultCalculate[72].installment;
-        let interestRate84 = resultCalculate[84].interestRate;
-        let installment84 = resultCalculate[84].installment;
+        if (customerType === "normal") {
+          let interestRate36 = resultCalculate[36].interestRate;
+          let installment36 = resultCalculate[36].installment;
+          let interestRate48 = resultCalculate[48].interestRate;
+          let installment48 = resultCalculate[48].installment;
+          let interestRate60 = resultCalculate[60].interestRate;
+          let installment60 = resultCalculate[60].installment;
+          let interestRate72 = resultCalculate[72].interestRate;
+          let installment72 = resultCalculate[72].installment;
+          let interestRate84 = resultCalculate[84].interestRate;
+          let installment84 = resultCalculate[84].installment;
 
-        // Using flex message simulator for json
-        let flexJson = {
-          type: "bubble",
-          size: "giga",
-          body: {
-            type: "box",
-            layout: "vertical",
-            contents: [
-              {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "text",
-                    text: "P Auto 095-826-3339",
-                    size: "xl",
-                    color: "#0551c2ff",
-                    weight: "bold",
-                    align: "center",
-                  },
-                ],
-              },
-              {
-                type: "separator",
-                margin: "lg",
-              },
-              {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: "ปีจดทะเบียนรถยนต์",
-                        size: "md",
-                        weight: "bold",
-                      },
-                    ],
-                    width: "150px",
-                  },
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: `${carYearTxt}`,
-                        size: "md",
-                        weight: "bold",
-                        align: "end",
-                      },
-                    ],
-                  },
-                ],
-                margin: "lg",
-              },
-              {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: "ราคารถยนต์",
-                        size: "md",
-                        weight: "bold",
-                      },
-                    ],
-                    width: "100px",
-                  },
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: `${carPriceTxt} บาท`,
-                        size: "md",
-                        weight: "bold",
-                        align: "end",
-                      },
-                    ],
-                  },
-                ],
-                margin: "lg",
-              },
-              {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: "เงินดาวน์",
-                        size: "md",
-                        weight: "bold",
-                      },
-                    ],
-                    width: "100px",
-                  },
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: `${downPaymentTxt} บาท`,
-                        size: "md",
-                        weight: "bold",
-                        align: "end",
-                      },
-                    ],
-                  },
-                ],
-                margin: "lg",
-              },
-              {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: "ยอดจัด",
-                        size: "lg",
-                        weight: "bold",
-                      },
-                    ],
-                    width: "100px",
-                  },
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: `${loanTxt} บาท`,
-                        size: "lg",
-                        weight: "bold",
-                        align: "end",
-                      },
-                    ],
-                  },
-                ],
-                margin: "lg",
-              },
-              {
-                type: "separator",
-                margin: "lg",
-              },
-              {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: "ค่างวด",
-                        size: "md",
-                      },
-                    ],
-                  },
-                ],
-                margin: "lg",
-              },
-              {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: `36 งวด (${interestRate36}%)`,
-                        size: "sm",
-                      },
-                    ],
-                    width: "100px",
-                  },
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: `${installment36} บาท`,
-                        size: "sm",
-                        align: "end",
-                        weight: "bold",
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: `48 งวด (${interestRate48}%)`,
-                        size: "sm",
-                      },
-                    ],
-                    width: "100px",
-                  },
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: `${installment48} บาท`,
-                        size: "sm",
-                        align: "end",
-                        weight: "bold",
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: `60 งวด (${interestRate60}%)`,
-                        size: "sm",
-                      },
-                    ],
-                    width: "100px",
-                  },
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: `${installment60} บาท`,
-                        size: "sm",
-                        align: "end",
-                        weight: "bold",
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: `72 งวด (${interestRate72}%)`,
-                        size: "sm",
-                      },
-                    ],
-                    width: "100px",
-                  },
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: `${installment72} บาท`,
-                        size: "sm",
-                        align: "end",
-                        weight: "bold",
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: `84 งวด (${interestRate84}%)`,
-                        size: "sm",
-                      },
-                    ],
-                    width: "100px",
-                  },
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: `${installment84} บาท`,
-                        size: "sm",
-                        align: "end",
-                        weight: "bold",
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                type: "separator",
-                margin: "lg",
-              },
-              {
-                type: "text",
-                text: "*ราคาค่างวดยังไม่รวม VAT\n*สำหรับพิจารณาข้อมูลเบื้องต้นไม่สามารถนำไปอ้างอิงในการซื้อขายได้",
-                size: "xxs",
-                weight: "bold",
-                margin: "lg",
-                align: "center",
-                color: "#e8505b",
-                wrap: true,
-              },
-            ],
-            spacing: "md",
-          },
-          footer: {
-            type: "box",
-            layout: "vertical",
-            contents: [
-              {
-                type: "button",
-                action: {
-                  type: "uri",
-                  label: "สอบถามเพิ่มเติม",
-                  uri: "tel:0958263339",
+          // Using flex message simulator for json
+          let flexJson = {
+            type: "bubble",
+            size: "giga",
+            body: {
+              type: "box",
+              layout: "vertical",
+              contents: [
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "text",
+                      text: "P Auto 095-826-3339",
+                      size: "xl",
+                      color: "#0551c2ff",
+                      weight: "bold",
+                      align: "center",
+                    },
+                  ],
                 },
-                style: "primary",
-              },
-            ],
-          },
-        };
+                {
+                  type: "separator",
+                  margin: "lg",
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "ปีจดทะเบียนรถยนต์",
+                          size: "md",
+                          weight: "bold",
+                        },
+                      ],
+                      width: "150px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${carYearTxt}`,
+                          size: "md",
+                          weight: "bold",
+                          align: "end",
+                        },
+                      ],
+                    },
+                  ],
+                  margin: "lg",
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "ราคารถยนต์",
+                          size: "md",
+                          weight: "bold",
+                        },
+                      ],
+                      width: "100px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${carPriceTxt} บาท`,
+                          size: "md",
+                          weight: "bold",
+                          align: "end",
+                        },
+                      ],
+                    },
+                  ],
+                  margin: "lg",
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "เงินดาวน์",
+                          size: "md",
+                          weight: "bold",
+                        },
+                      ],
+                      width: "100px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${downPaymentTxt} บาท`,
+                          size: "md",
+                          weight: "bold",
+                          align: "end",
+                        },
+                      ],
+                    },
+                  ],
+                  margin: "lg",
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "ยอดจัด",
+                          size: "lg",
+                          weight: "bold",
+                        },
+                      ],
+                      width: "100px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${loanTxt} บาท`,
+                          size: "lg",
+                          weight: "bold",
+                          align: "end",
+                        },
+                      ],
+                    },
+                  ],
+                  margin: "lg",
+                },
+                {
+                  type: "separator",
+                  margin: "lg",
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "ค่างวด",
+                          size: "md",
+                        },
+                      ],
+                    },
+                  ],
+                  margin: "lg",
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `36 งวด (${interestRate36}%)`,
+                          size: "sm",
+                        },
+                      ],
+                      width: "110px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${installment36} บาท`,
+                          size: "sm",
+                          align: "end",
+                          weight: "bold",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `48 งวด (${interestRate48}%)`,
+                          size: "sm",
+                        },
+                      ],
+                      width: "110px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${installment48} บาท`,
+                          size: "sm",
+                          align: "end",
+                          weight: "bold",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `60 งวด (${interestRate60}%)`,
+                          size: "sm",
+                        },
+                      ],
+                      width: "110px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${installment60} บาท`,
+                          size: "sm",
+                          align: "end",
+                          weight: "bold",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `72 งวด (${interestRate72}%)`,
+                          size: "sm",
+                        },
+                      ],
+                      width: "110px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${installment72} บาท`,
+                          size: "sm",
+                          align: "end",
+                          weight: "bold",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `84 งวด (${interestRate84}%)`,
+                          size: "sm",
+                        },
+                      ],
+                      width: "110px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${installment84} บาท`,
+                          size: "sm",
+                          align: "end",
+                          weight: "bold",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  type: "separator",
+                  margin: "lg",
+                },
+                {
+                  type: "text",
+                  text:
+                    "*ราคาค่างวดยังไม่รวม VAT\n*สำหรับพิจารณาข้อมูลเบื้องต้นไม่สามารถนำไปอ้างอิงในการซื้อขายได้",
+                  size: "xxs",
+                  weight: "bold",
+                  margin: "lg",
+                  align: "center",
+                  color: "#e8505b",
+                  wrap: true,
+                },
+              ],
+              spacing: "md",
+            },
+            footer: {
+              type: "box",
+              layout: "vertical",
+              contents: [
+                {
+                  type: "button",
+                  action: {
+                    type: "uri",
+                    label: "สอบถามเพิ่มเติม",
+                    uri: "tel:0958263339",
+                  },
+                  style: "primary",
+                },
+              ],
+            },
+          };
 
-        return [{ type: "flex", altText: "คำนวณค่างวดรถ", contents: flexJson }];
+          return [{ type: "flex", altText: "คำนวณค่างวดรถ", contents: flexJson }];
+        } else {
+          let interestRate48 = resultCalculate[48].interestRate;
+          let installment48 = resultCalculate[48].installment;
+          let interestRate60 = resultCalculate[60].interestRate;
+          let installment60 = resultCalculate[60].installment;
+          let interestRate72 = resultCalculate[72].interestRate;
+          let installment72 = resultCalculate[72].installment;
+
+          // Using flex message simulator for json
+          let flexJson = {
+            type: "bubble",
+            size: "giga",
+            body: {
+              type: "box",
+              layout: "vertical",
+              contents: [
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "text",
+                      text: "P Auto 095-826-3339",
+                      size: "xl",
+                      color: "#0551c2ff",
+                      weight: "bold",
+                      align: "center",
+                    },
+                  ],
+                },
+                {
+                  type: "separator",
+                  margin: "lg",
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "ปีจดทะเบียนรถยนต์",
+                          size: "md",
+                          weight: "bold",
+                        },
+                      ],
+                      width: "150px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${carYearTxt}`,
+                          size: "md",
+                          weight: "bold",
+                          align: "end",
+                        },
+                      ],
+                    },
+                  ],
+                  margin: "lg",
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "ราคารถยนต์",
+                          size: "md",
+                          weight: "bold",
+                        },
+                      ],
+                      width: "100px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${carPriceTxt} บาท`,
+                          size: "md",
+                          weight: "bold",
+                          align: "end",
+                        },
+                      ],
+                    },
+                  ],
+                  margin: "lg",
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "เงินดาวน์",
+                          size: "md",
+                          weight: "bold",
+                        },
+                      ],
+                      width: "100px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${downPaymentTxt} บาท`,
+                          size: "md",
+                          weight: "bold",
+                          align: "end",
+                        },
+                      ],
+                    },
+                  ],
+                  margin: "lg",
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "ยอดจัด",
+                          size: "lg",
+                          weight: "bold",
+                        },
+                      ],
+                      width: "100px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${loanTxt} บาท`,
+                          size: "lg",
+                          weight: "bold",
+                          align: "end",
+                        },
+                      ],
+                    },
+                  ],
+                  margin: "lg",
+                },
+                {
+                  type: "separator",
+                  margin: "lg",
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "ค่างวด",
+                          size: "md",
+                        },
+                      ],
+                    },
+                  ],
+                  margin: "lg",
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `48 งวด (${interestRate48}%)`,
+                          size: "sm",
+                        },
+                      ],
+                      width: "110px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${installment48} บาท`,
+                          size: "sm",
+                          align: "end",
+                          weight: "bold",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `60 งวด (${interestRate60}%)`,
+                          size: "sm",
+                        },
+                      ],
+                      width: "110px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${installment60} บาท`,
+                          size: "sm",
+                          align: "end",
+                          weight: "bold",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  type: "box",
+                  layout: "horizontal",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `72 งวด (${interestRate72}%)`,
+                          size: "sm",
+                        },
+                      ],
+                      width: "110px",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: `${installment72} บาท`,
+                          size: "sm",
+                          align: "end",
+                          weight: "bold",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  type: "separator",
+                  margin: "lg",
+                },
+                {
+                  type: "text",
+                  text:
+                    "*ราคาค่างวดยังไม่รวม VAT\n*สำหรับพิจารณาข้อมูลเบื้องต้นไม่สามารถนำไปอ้างอิงในการซื้อขายได้",
+                  size: "xxs",
+                  weight: "bold",
+                  margin: "lg",
+                  align: "center",
+                  color: "#e8505b",
+                  wrap: true,
+                },
+              ],
+              spacing: "md",
+            },
+            footer: {
+              type: "box",
+              layout: "vertical",
+              contents: [
+                {
+                  type: "button",
+                  action: {
+                    type: "uri",
+                    label: "สอบถามเพิ่มเติม",
+                    uri: "tel:0958263339",
+                  },
+                  style: "primary",
+                },
+              ],
+            },
+          };
+
+          return [{ type: "flex", altText: "คำนวณค่างวดรถ", contents: flexJson }];
+        }
       }
     </script>
   </body>
